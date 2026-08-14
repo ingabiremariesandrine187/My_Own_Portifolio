@@ -2,87 +2,85 @@
 
 import { FaGithub, FaLinkedin, FaArrowUp } from 'react-icons/fa';
 
+const LINKS = ['About', 'Skills', 'Projects', 'Contact'];
+
 export default function Footer() {
-  const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
+  const scrollToTop = () => window.scrollTo({ top: 0, behavior: 'smooth' });
 
   return (
-    <footer className="py-12 md:py-16 bg-gray-900 text-white">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        
-        {/* Logo and Social Links */}
-        <div className="flex flex-col md:flex-row justify-between items-center mb-8 md:mb-12">
-          {/* Logo */}
-          <div className="mb-6 md:mb-0">
-            <div className="text-2xl md:text-3xl font-bold flex items-center gap-2">
-              <span className="text-amber-500">Dev</span>
-              <span>Portfolio</span>
+    <footer className="section-base py-10 md:py-14 relative">
+      {/* Top amber glow line */}
+      <div className="section-glow-line mb-10 md:mb-14" />
+
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl">
+        <div className="flex flex-col md:flex-row justify-between items-center gap-8 mb-10">
+
+          {/* Brand */}
+          <div>
+            <div className="text-2xl font-extrabold mb-1">
+              <span className="text-[#f58232]">Dev</span>
+              <span className="text-[var(--text-primary)]">Portfolio</span>
             </div>
-            <p className="text-gray-400 text-sm mt-2">Frontend-Focused Software Engineer</p>
+            <p className="text-xs text-[var(--text-muted)]">Frontend-Focused Software Engineer</p>
           </div>
-          
-          {/* Social Links */}
-          <div className="flex items-center gap-6">
+
+          {/* Social icons */}
+          <div className="flex items-center gap-4">
             <a
-              href="https://github.com/ingabiremariesandrine187" // Replace with your GitHub
+              href="https://github.com/ingabiremariesandrine187"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-gray-400 hover:text-white transition-colors duration-200"
+              className="w-10 h-10 rounded-full glass-card flex items-center justify-center text-[var(--text-muted)] hover:text-[#f58232] hover:border-[rgba(245,130,50,0.45)] transition-colors duration-200"
             >
-              <FaGithub className="text-2xl" />
+              <FaGithub />
             </a>
             <a
-              href="https://www.linkedin.com/in/ingabire-marie-sandrine-74b147276/" // Replace with your LinkedIn
+              href="https://www.linkedin.com/in/ingabire-marie-sandrine-74b147276/"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-gray-400 hover:text-white transition-colors duration-200"
+              className="w-10 h-10 rounded-full glass-card flex items-center justify-center text-[var(--text-muted)] hover:text-[#3b82f6] hover:border-[rgba(59,130,246,0.45)] transition-colors duration-200"
             >
-              <FaLinkedin className="text-2xl" />
+              <FaLinkedin />
             </a>
           </div>
         </div>
 
-        {/* Horizontal Line */}
-        <div className="w-full h-px bg-gray-800 mb-8 md:mb-12"></div>
+        {/* Divider */}
+        <div className="w-full h-px bg-[rgba(255,255,255,0.06)] mb-8" />
 
-        {/* Copyright and Navigation */}
-        <div className="flex flex-col md:flex-row justify-between items-center">
-          {/* Copyright */}
-          <div className="mb-6 md:mb-0 text-center md:text-left">
-            <p className="text-gray-400">
-              © {new Date().getFullYear()} Marie Sandrine Ingabire. All rights reserved.
-            </p>
-            <p className="text-gray-500 text-sm mt-1">
-              Built with Next.js, TypeScript, and Tailwind CSS
-            </p>
-          </div>
-          
-          {/* Quick Links */}
-          <div className="flex flex-wrap justify-center gap-6">
-            {['About', 'Skills', 'Projects', 'Contact'].map((item) => (
+        {/* Bottom row */}
+        <div className="flex flex-col md:flex-row justify-between items-center gap-4">
+          <p className="text-xs text-[var(--text-muted)] text-center md:text-left">
+            © {new Date().getFullYear()} Marie Sandrine Ingabire · All rights reserved
+            <br className="sm:hidden" />
+            <span className="hidden sm:inline"> · </span>
+            Built with Next.js, TypeScript &amp; Tailwind CSS
+          </p>
+
+          <div className="flex flex-wrap justify-center items-center gap-5">
+            {LINKS.map((l) => (
               <a
-                key={item}
-                href={`#${item.toLowerCase()}`}
-                className="text-gray-400 hover:text-amber-500 transition-colors duration-200 text-sm"
+                key={l}
+                href={`#${l.toLowerCase()}`}
+                className="text-xs text-[var(--text-muted)] hover:text-[#f58232] transition-colors duration-200"
               >
-                {item}
+                {l}
               </a>
             ))}
             <button
               onClick={scrollToTop}
-              className="inline-flex items-center gap-2 text-gray-400 hover:text-amber-500 transition-colors duration-200 text-sm"
+              className="flex items-center gap-1.5 text-xs text-[var(--text-muted)] hover:text-[#f58232] transition-colors duration-200"
             >
-              <FaArrowUp className="text-xs" />
-              Back to Top
+              <FaArrowUp className="text-[10px]" />
+              Top
             </button>
           </div>
         </div>
 
-        {/* Footer Note */}
-        <div className="text-center mt-8 pt-8 border-t border-gray-800">
-          <p className="text-gray-500 text-sm">
-            Made with ❤️ by Marie Sandrine Ingabire • Open to new opportunities
+        {/* Made with love */}
+        <div className="text-center mt-8 pt-6 border-t border-[rgba(255,255,255,0.05)]">
+          <p className="text-[10px] text-[var(--text-muted)]">
+            Made with ❤️ by Marie Sandrine Ingabire · Open to new opportunities
           </p>
         </div>
       </div>

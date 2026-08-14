@@ -1,161 +1,244 @@
 'use client';
 
+import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { FiLinkedin, FiGithub } from 'react-icons/fi';
+import { FiLinkedin, FiGithub, FiDownload } from 'react-icons/fi';
+import { FiArrowDown } from 'react-icons/fi';
+
+const TITLES = [
+   'Full Stack Developer',
+  'Software Engineer',
+  'Mobile Developer',
+  'Information Systems Analyst',
+];
 
 export default function Hero() {
+  const [titleIndex, setTitleIndex] = useState(0);
+  const [displayed, setDisplayed] = useState('');
+  const [deleting, setDeleting] = useState(false);
+  const [charIndex, setCharIndex] = useState(0);
+  const tickRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const sectionRef = useRef<HTMLElement>(null);
+
+  // Immediately reveal all data-reveal elements in the Hero (already in viewport on load)
+  useEffect(() => {
+    const el = sectionRef.current;
+    if (!el) return;
+    // Small delay so CSS transitions play as entrance animations
+    const timer = setTimeout(() => {
+      el.querySelectorAll('[data-reveal]').forEach((node) => {
+        node.classList.add('revealed');
+      });
+    }, 80);
+    return () => clearTimeout(timer);
+  }, []);
+
+  // Typewriter effect
+  useEffect(() => {
+    const current = TITLES[titleIndex];
+
+    if (!deleting && charIndex <= current.length) {
+      tickRef.current = setTimeout(() => {
+        setDisplayed(current.slice(0, charIndex));
+        setCharIndex((c) => c + 1);
+      }, 80);
+    } else if (!deleting && charIndex > current.length) {
+      tickRef.current = setTimeout(() => setDeleting(true), 1800);
+    } else if (deleting && charIndex >= 0) {
+      tickRef.current = setTimeout(() => {
+        setDisplayed(current.slice(0, charIndex));
+        setCharIndex((c) => c - 1);
+      }, 45);
+    } else {
+      setDeleting(false);
+      setTitleIndex((i) => (i + 1) % TITLES.length);
+      setCharIndex(0);
+    }
+
+    return () => { if (tickRef.current) clearTimeout(tickRef.current); };
+  }, [charIndex, deleting, titleIndex]);
+
   return (
-    <section className="relative min-h-screen flex items-center justify-center px-4 sm:px-6 md:px-8 overflow-hidden bg-gradient-to-br from-gray-50 to-white pt-20 sm:pt-24 md:pt-32">
-      
-      {/* Background grid pattern */}
-      <div className="absolute inset-0 opacity-20">
-        <div className="absolute inset-0" 
-          style={{
-            backgroundImage: `
-              linear-gradient(90deg, #e5e7eb 1px, transparent 1px),
-              linear-gradient(180deg, #e5e7eb 1px, transparent 1px)
-            `,
-            backgroundSize: '50px 50px'
-          }}
-        />
-      </div>
+    <section
+      ref={sectionRef}
+      className="section-base relative min-h-screen flex items-center justify-center px-4 sm:px-6 md:px-8 overflow-hidden pt-20"
+      id="hero"
+    >
+      {/* Subtle amber vignette at bottom */}
+      <div className="pointer-events-none absolute bottom-0 left-0 right-0 h-48 bg-gradient-to-t from-[rgba(245,130,50,0.06)] to-transparent" />
 
-      {/* Subtle background blurs */}
-      <div className="absolute top-1/4 -left-1/4 w-64 h-64 sm:w-80 sm:h-80 md:w-96 md:h-96 bg-amber-100 rounded-full blur-3xl opacity-20"></div>
-      <div className="absolute bottom-1/4 -right-1/4 w-64 h-64 sm:w-80 sm:h-80 md:w-96 md:h-96 bg-blue-100 rounded-full blur-3xl opacity-20"></div>
+      {/* Grid overlay */}
+      <div
+        className="pointer-events-none absolute inset-0 opacity-[0.04]"
+        style={{
+          backgroundImage:
+            'linear-gradient(rgba(255,255,255,0.4) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.4) 1px, transparent 1px)',
+          backgroundSize: '60px 60px',
+        }}
+      />
 
-      {/* Main content container */}
-      <div className="container mx-auto relative z-10">
-        <div className="grid lg:grid-cols-2 gap-8 items-center">
-          
-          {/* Left Column - Text Content */}
-          <div className="text-left space-y-4 md:space-y-6 pt-8 sm:pt-0">
-            
-            {/* Greeting */}
-            <div className="mb-2">
-              <h2 className="text-lg md:text-xl font-light text-gray-600">
-                Hi, I&apos;m
-              </h2>
+      <div className="container mx-auto relative z-10 max-w-7xl">
+        <div className="grid lg:grid-cols-2 gap-12 lg:gap-8 items-center">
+
+          {/* ── Left: Text ─────────────────────────────────────── */}
+          <div className="space-y-6 text-left">
+
+            {/* Greeting badge */}
+            <div
+              data-reveal="left"
+              className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-[rgba(245,130,50,0.3)] bg-[rgba(245,130,50,0.08)] text-sm text-[#f58232] font-medium"
+            >
+              <span className="w-2 h-2 rounded-full bg-[#f58232] animate-pulse" />
+              Available for opportunities
             </div>
-            
+
             {/* Name */}
-            <div>
-              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold leading-tight tracking-tight">
-                <span className="text-gray-900">Marie Sandrine</span>
+            <div data-reveal="left" data-delay="100">
+              <p className="text-[var(--text-secondary)] text-lg mb-1">Hi, I&apos;m</p>
+              <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold leading-tight tracking-tight">
+                <span className="text-[var(--text-primary)]">Marie Sandrine</span>
                 <br />
-                <span className="text-amber-500">Ingabire</span>
+                <span className="text-amber-gradient">Ingabire</span>
               </h1>
             </div>
-            
-            {/* Nickname subtitle */}
-            <div className="mb-4">
-              <p className="text-base sm:text-lg md:text-xl font-medium text-gray-700">
-                <span className="text-gray-400">(</span>
-                <span className="text-gray-700">Sandrine</span>
-                <span className="text-gray-400">)</span>
-              </p>
-            </div>
-            
-            {/* Title */}
-            <div>
-              <h3 className="text-lg sm:text-xl md:text-2xl font-normal text-gray-700 mb-2">
-                Frontend-Focused Software Engineer
-              </h3>
-            </div>
-            
-            {/* Description */}
-            <div className="max-w-xl pt-2">
-              <p className="text-sm sm:text-base md:text-lg leading-relaxed text-gray-600">
-                Crafting beautiful, responsive user interfaces with <strong className="text-gray-800">React & Next.js</strong>. 
-                Strong frontend expertise complemented by solid backend skills in 
-                database design and API development.
-              </p>
+
+            {/* Typewriter title */}
+            <div data-reveal="left" data-delay="200" className="h-10 flex items-center">
+              <span className="text-xl sm:text-2xl font-light text-[var(--text-secondary)]">
+                {displayed}
+                <span className="ml-0.5 inline-block w-0.5 h-6 bg-[#f58232] align-middle animate-blink" />
+              </span>
             </div>
 
-            {/* Actions: Button and Social Icons */}
-            <div className="flex flex-col sm:flex-row items-start sm:items-center space-y-4 sm:space-y-0 sm:space-x-6 pt-6 md:pt-8">
-              {/* Button - Fixed to scroll to projects section */}
-              <a 
-                href="#projects" 
-                className="group px-5 py-2.5 sm:px-6 sm:py-3 rounded-lg font-medium text-sm sm:text-base transition-all duration-300 flex items-center bg-amber-500 hover:bg-amber-600 text-white shadow-md hover:shadow-lg"
+            {/* Bio */}
+            <p
+              data-reveal="left"
+              data-delay="300"
+              className="max-w-lg text-[var(--text-secondary)] text-base sm:text-lg leading-relaxed"
+            >
+              Crafting beautiful, responsive user interfaces with{' '}
+              <strong className="text-[var(--text-primary)]">React &amp; Next.js</strong>.
+              Strong frontend expertise complemented by solid backend skills in
+              database design and API development.
+            </p>
+
+            {/* CTA row */}
+            <div
+              data-reveal="left"
+              data-delay="400"
+              className="flex flex-col sm:flex-row items-start sm:items-center gap-4 pt-2"
+            >
+              <a
+                href="#projects"
+                className="group relative px-7 py-3 rounded-lg font-semibold text-white overflow-hidden transition-all duration-300"
+                style={{ background: 'linear-gradient(135deg,#f58232,#ffb366)' }}
               >
-                View My Work
-                <svg className="w-3.5 h-3.5 sm:w-4 sm:h-4 ml-2 group-hover:translate-y-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
-                </svg>
+                <span className="relative z-10 flex items-center gap-2">
+                  View My Work
+                  <FiArrowDown className="group-hover:translate-y-1 transition-transform duration-300" />
+                </span>
+                <span className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
               </a>
-              
-              {/* Social Icons */}
-              <div className="flex space-x-3 sm:space-x-4">
-                <Link href="#" className="text-gray-600 hover:text-amber-500 text-lg sm:text-xl p-1.5 sm:p-2 rounded-full hover:bg-amber-50 transition-colors duration-200">
-                  <FiLinkedin />
+
+              <a
+                href="#contact"
+                className="px-7 py-3 rounded-lg font-semibold border border-[var(--border)] text-[var(--text-primary)] hover:border-[#f58232] hover:text-[#f58232] transition-all duration-300"
+              >
+                Hire Me
+              </a>
+
+              <a
+                href="https://drive.google.com/uc?export=download&id=1e4edqvX_W2RLee79MUimS1kp7fblmD9k"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group flex items-center gap-2 px-7 py-3 rounded-lg font-semibold border border-[rgba(245,130,50,0.35)] text-[#f58232] hover:bg-[rgba(245,130,50,0.08)] hover:border-[#f58232] transition-all duration-300"
+              >
+                <FiDownload className="group-hover:translate-y-0.5 transition-transform duration-300" />
+                Download CV
+              </a>
+
+              {/* Social icons */}
+              <div className="flex gap-3 sm:ml-2">
+                <Link
+                  href="https://www.linkedin.com/in/ingabire-marie-sandrine-74b147276/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-10 h-10 rounded-full glass-card flex items-center justify-center text-[var(--text-secondary)] hover:text-[#f58232] transition-colors duration-200"
+                >
+                  <FiLinkedin size={18} />
                 </Link>
-                <Link href="#" className="text-gray-600 hover:text-amber-500 text-lg sm:text-xl p-1.5 sm:p-2 rounded-full hover:bg-amber-50 transition-colors duration-200">
-                  <FiGithub />
+                <Link
+                  href="https://github.com/ingabiremariesandrine187"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-10 h-10 rounded-full glass-card flex items-center justify-center text-[var(--text-secondary)] hover:text-[#f58232] transition-colors duration-200"
+                >
+                  <FiGithub size={18} />
                 </Link>
               </div>
+            </div>
+
+            {/* Stats row */}
+            <div data-reveal="left" data-delay="500" className="flex gap-8 pt-4">
+              {[
+                { value: '3+', label: 'Years Exp.' },
+                { value: '10+', label: 'Projects' },
+                { value: '100%', label: 'Dedication' },
+              ].map((s) => (
+                <div key={s.label}>
+                  <p className="text-2xl font-extrabold text-amber-gradient">{s.value}</p>
+                  <p className="text-xs text-[var(--text-muted)] uppercase tracking-wider mt-0.5">{s.label}</p>
+                </div>
+              ))}
             </div>
           </div>
-          
-          {/* Right Column - Profile Picture */}
-          <div className="flex justify-center lg:justify-end mt-12 sm:mt-16 md:mt-0">
-            <div className="relative w-[250px] h-[250px] sm:w-[280px] sm:h-[280px] md:w-[320px] md:h-[320px] lg:w-[350px] lg:h-[350px] xl:w-[400px] xl:h-[400px]">
-              
-              {/* Main circle with profile picture - Center the image properly */}
-              <div className="absolute inset-0 rounded-full shadow-lg sm:shadow-xl md:shadow-2xl border border-gray-200 overflow-hidden bg-white">
-                {/* Profile Image Container */}
-                <div className="relative w-full h-full">
-                  <Image
-                    src="/Sandrine Marie.jpeg"
-                    alt="Marie Sandrine Ingabire - Software Engineer"
-                    fill
-                    className="object-contain"
-                    priority
-                  />
-                </div>
+
+          {/* ── Right: Profile image ────────────────────────────── */}
+          <div
+            data-reveal="right"
+            data-delay="200"
+            className="flex justify-center lg:justify-end"
+          >
+            <div className="relative w-[240px] h-[240px] sm:w-[270px] sm:h-[270px] md:w-[310px] md:h-[310px] lg:w-[350px] lg:h-[350px]">
+
+              {/* Outer decorative spinning rings */}
+              <div className="absolute inset-[-18px] rounded-full border border-[rgba(245,130,50,0.15)] animate-spin-slow" />
+              <div className="absolute inset-[-36px] rounded-full border border-[rgba(245,130,50,0.07)] animate-spin-slow-reverse" />
+
+              {/* Pulse ring */}
+              <div className="absolute inset-0 rounded-full border-2 border-[rgba(245,130,50,0.4)] animate-pulse-ring" />
+
+              {/* Amber glow backdrop */}
+              <div className="absolute inset-0 rounded-full bg-[radial-gradient(circle,rgba(245,130,50,0.18)_0%,transparent_70%)]" />
+
+              {/* Profile circle */}
+              <div className="absolute inset-0 rounded-full overflow-hidden border-2 border-[rgba(245,130,50,0.35)] shadow-[0_0_60px_rgba(245,130,50,0.25)]">
+                <Image
+                  src="/Sandrine Marie.jpeg"
+                  alt="Marie Sandrine Ingabire – Software Engineer"
+                  fill
+                  className="object-cover object-top"
+                  priority
+                />
               </div>
 
-              {/* Experience Card with floating animation */}
-              <div className="absolute -bottom-3 -right-3 sm:-bottom-4 sm:-right-4 bg-white/95 backdrop-blur-sm shadow-lg sm:shadow-xl rounded-lg p-3 sm:p-4 md:p-5 w-28 sm:w-32 md:w-36 lg:w-40 text-center border border-gray-100 animate-float">
-                <p className="text-2xl sm:text-3xl md:text-4xl font-extrabold leading-none text-amber-500">
-                  3+
-                </p>
-                <p className="text-xs sm:text-sm mt-0.5 sm:mt-1 text-gray-600">
-                  Years Experience
-                </p>
+              {/* Floating experience card */}
+              <div className="absolute -bottom-4 -right-4 glass-card rounded-xl p-4 w-36 text-center animate-float shadow-lg border border-[rgba(245,130,50,0.25)]">
+                <p className="text-3xl font-extrabold text-amber-gradient leading-none">3+</p>
+                <p className="text-xs text-[var(--text-secondary)] mt-1">Years Experience</p>
               </div>
 
-              {/* Additional decorative element */}
-              <div className="absolute -top-3 -left-3 sm:-top-4 sm:-left-4 w-16 h-16 sm:w-20 sm:h-20 border-2 border-gray-200 rounded-full opacity-50"></div>
             </div>
           </div>
         </div>
       </div>
-      
-      {/* Scroll Indicator */}
-      <div className="absolute bottom-6 sm:bottom-8 left-1/2 transform -translate-x-1/2 flex flex-col items-center space-y-1.5 sm:space-y-2">
-        <p className="text-xs tracking-widest font-mono text-gray-400 opacity-70">SCROLL</p>
-        <div className="w-px h-6 sm:h-8 bg-gradient-to-b from-amber-400 to-transparent"></div>
-      </div>
 
-      {/* Add floating animation CSS */}
-      <style jsx global>{`
-        @keyframes float {
-          0% {
-            transform: translateY(0px);
-          }
-          50% {
-            transform: translateY(-8px);
-          }
-          100% {
-            transform: translateY(0px);
-          }
-        }
-        .animate-float {
-          animation: float 3s ease-in-out infinite;
-        }
-      `}</style>
+      {/* Scroll indicator */}
+      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2">
+        <p className="text-[10px] tracking-[0.25em] text-[var(--text-muted)] font-mono uppercase">Scroll</p>
+        <div className="w-px h-10 bg-gradient-to-b from-[#f58232] to-transparent" />
+      </div>
     </section>
   );
 }
