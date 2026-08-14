@@ -17,11 +17,16 @@ export default function Footer() {
 
           {/* Brand */}
           <div>
-            <div className="text-2xl font-extrabold mb-1">
-              <span className="text-[#f58232]">Dev</span>
-              <span className="text-[var(--text-primary)]">Portfolio</span>
+            <div className="flex items-center gap-2.5 mb-1">
+              <div
+                className="w-8 h-8 rounded-lg flex items-center justify-center text-xs font-extrabold text-white flex-shrink-0"
+                style={{ background: 'linear-gradient(135deg,var(--amber),var(--amber-light))' }}
+              >
+                MS
+              </div>
+              <span className="text-lg font-bold text-[var(--text-primary)]">Marie Sandrine</span>
             </div>
-            <p className="text-xs text-[var(--text-muted)]">Frontend-Focused Software Engineer</p>
+            <p className="text-xs text-[var(--text-muted)] pl-10">Software Engineer</p>
           </div>
 
           {/* Social icons */}

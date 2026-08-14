@@ -65,12 +65,21 @@ export default function Navbar() {
           <div className="flex justify-between items-center py-4 md:py-5">
 
             {/* Logo */}
-            <Link href="#hero" className="flex items-center gap-1 group">
-              <span className="text-xl md:text-2xl font-extrabold tracking-tight">
-                <span className="text-[var(--amber)] group-hover:text-[var(--amber-light)] transition-colors duration-200">Dev</span>
-                <span className="text-[var(--text-primary)]">Portfolio</span>
+            <Link href="#hero" className="flex items-center gap-2.5 group">
+              {/* Monogram badge */}
+              <div
+                className="w-9 h-9 rounded-xl flex items-center justify-center text-sm font-extrabold text-white flex-shrink-0 transition-transform duration-300 group-hover:scale-110"
+                style={{ background: 'linear-gradient(135deg,var(--amber),var(--amber-light))' }}
+              >
+                MS
+              </div>
+              {/* Name */}
+              <span className="text-base md:text-lg font-bold tracking-tight leading-tight">
+                <span className="text-[var(--text-primary)]">Marie Sandrine</span>
+                <span className="block text-[10px] font-medium tracking-widest uppercase text-[var(--text-muted)] -mt-0.5">
+                  Software Engineer
+                </span>
               </span>
-              <span className="ml-1.5 w-1.5 h-1.5 rounded-full bg-[var(--amber)] animate-pulse" />
             </Link>
 
             {/* Desktop links + toggle */}
